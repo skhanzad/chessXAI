@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+venv/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.test
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+.cursor/
+.cursorrules
+.cursorignore
+.cursorconfig
+.cursorignore
+
+# OS generated files
+.DS_Store
