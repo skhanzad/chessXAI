@@ -1,0 +1,805 @@
+{
+  "metadata": {
+    "created_at": "2026-01-09T14:24:24.948695",
+    "agent_plays_first": true,
+    "final_result": "0-1",
+    "total_moves": 28
+  },
+  "initial_fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+  "moves": [
+    {
+      "move_number": 1,
+      "actor": "GPT-5.1",
+      "move": "e2-e4",
+      "position_fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+      "intent": {
+        "type": "strategic_break",
+        "description": "Advancing the king pawn two squares immediately contests the center, opens lines for the queen and kingside bishop, and adopts a principled, flexible approach against Stockfish that can lead to open positions where accurate piece activity matters greatly."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 e4 execution"
+    },
+    {
+      "move_number": 2,
+      "actor": "Stockfish",
+      "move": "e7-e5",
+      "position_fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: e7e5"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 e5 execution"
+    },
+    {
+      "move_number": 3,
+      "actor": "GPT-5.1",
+      "move": "Ng1-f3",
+      "position_fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+      "intent": {
+        "type": "tactical",
+        "description": "Developing the kingside knight attacks Black\u2019s e5 pawn, reinforces central control (d4/e5 squares), and prepares rapid castling while keeping the option of Bc4 or Bb5 for active piece play. It fits the open-game plan of quick development and kingside safety without compromising pawn structure."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Develop Kingside \u2192 f3 execution"
+    },
+    {
+      "move_number": 4,
+      "actor": "Stockfish",
+      "move": "Nb8-c6",
+      "position_fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: b8c6"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 c6 execution"
+    },
+    {
+      "move_number": 5,
+      "actor": "GPT-5.1",
+      "move": "Bf1-c4",
+      "position_fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "intent": {
+        "type": "development",
+        "description": "Developing the bishop to c4 completes a key part of kingside development, eyes the sensitive f7-square, and prepares for quick castling followed by the central break d2d4, which will open lines for both bishops and the rooks."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Develop Kingside \u2192 c4 execution"
+    },
+    {
+      "move_number": 6,
+      "actor": "Stockfish",
+      "move": "Ng8-f6",
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: g8f6"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 f6 execution"
+    },
+    {
+      "move_number": 7,
+      "actor": "GPT-5.1",
+      "move": "Ke1-g1",
+      "position_fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+      "intent": {
+        "type": "tactical",
+        "description": "Castling kingside immediately fulfills the first part of the goal (O-O) while the position is safe: Black has no open files or direct threats on g1, and our king becomes safer than in the center. After castling, we can more effectively support and prepare the central break with d2d4, with the rook on f1 and king secured."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Develop Kingside \u2192 g1 execution"
+    },
+    {
+      "move_number": 8,
+      "actor": "Stockfish",
+      "move": "Nf6-e4",
+      "position_fen": "r1bqkb1r/pppp1ppp/2n5/4p3/2B1n3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 5",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: f6e4"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 e4 execution"
+    },
+    {
+      "move_number": 9,
+      "actor": "GPT-5.1",
+      "move": "d2-d4",
+      "position_fen": "r1bqkb1r/pppp1ppp/2n5/4p3/2BPn3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+      "intent": {
+        "type": "development",
+        "description": "The goal is to execute the central break with d2d4 under good conditions. White is fully castled, has a bishop on c4 eyeing f7 and a knight on f3 controlling e5 and d4. Playing d2d4 immediately challenges Black\u2019s strong knight on e4 and the e5 pawn, opens lines for the rooks to join central files later, and increases central control, all in accordance with the stated plan."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Central Break \u2192 d4 execution"
+    },
+    {
+      "move_number": 10,
+      "actor": "Stockfish",
+      "move": "d7-d5",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/3pp3/2BPn3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: d7d5"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 d5 execution"
+    },
+    {
+      "move_number": 11,
+      "actor": "GPT-5.1",
+      "move": "Rf1-e1",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/3pp3/2BPn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 6",
+      "intent": {
+        "type": "strategic",
+        "description": "Placing the rook on e1 directly increases pressure on the e5 pawn and central file while improving coordination between the queen, bishop, and rooks following the d4 advance."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 e1 execution"
+    },
+    {
+      "move_number": 12,
+      "actor": "Stockfish",
+      "move": "Ne4-f2",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/3pp3/2BP4/5N2/PPP2nPP/RNBQR1K1 w kq - 0 7",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: e4f2"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 f2 execution"
+    },
+    {
+      "move_number": 13,
+      "actor": "GPT-5.1",
+      "move": "Qd1-e2",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/3pp3/2BP4/5N2/PPP1QnPP/RNB1R1K1 b kq - 1 7",
+      "intent": {
+        "type": "strategic_break",
+        "description": "Playing d1e2 centralizes the queen on the e-file, directly supports pressure on Black\u2019s e5 pawn, and prepares to double rooks on the e- and/or d-files (Rad1/Re1). It also connects the rooks and harmonizes with future knight centralization (Nc3, Nbd2-f1-e3/g3), using the open center for coordinated piece activity."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Positional Improvement \u2192 e2 execution"
+    },
+    {
+      "move_number": 14,
+      "actor": "Stockfish",
+      "move": "Nf2-g4",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/3pp3/2BP2n1/5N2/PPP1Q1PP/RNB1R1K1 w kq - 2 8",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: f2g4"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 g4 execution"
+    },
+    {
+      "move_number": 15,
+      "actor": "GPT-5.1",
+      "move": "Re1-f1",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/3pp3/2BP2n1/5N2/PPP1Q1PP/RNB2RK1 b kq - 3 8",
+      "intent": {
+        "type": "strategic",
+        "description": "Centralizing the rook from e1 to f1 clears the e1-square for the knight on f3 to reroute via d2\u2013f1\u2013g3/e3 while keeping the rook connected for future doubling on the e- and d-files. This supports the plan of doubling rooks centrally and improving knight placement toward central and kingside outposts to increase pressure on e5 and Black\u2019s kingside."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Positional Improvement \u2192 f1 execution"
+    },
+    {
+      "move_number": 16,
+      "actor": "Stockfish",
+      "move": "d5-c4",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/4p3/2pP2n1/5N2/PPP1Q1PP/RNB2RK1 w kq - 0 9",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: d5c4"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 c4 execution"
+    },
+    {
+      "move_number": 17,
+      "actor": "GPT-5.1",
+      "move": "Nb1-d2",
+      "position_fen": "r1bqkb1r/ppp2ppp/2n5/4p3/2pP2n1/5N2/PPPNQ1PP/R1B2RK1 b kq - 1 9",
+      "intent": {
+        "type": "strategic",
+        "description": "The knight from b1 heads toward the planned d2\u2013f1 route, preparing to reach central and kingside outposts like e4, g5, or f5. From d2 it will also help reinforce central squares and clear the first rank for future Re1 and Rad1, supporting pressure on the e5 pawn."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Positional Improvement \u2192 d2 execution"
+    },
+    {
+      "move_number": 18,
+      "actor": "Stockfish",
+      "move": "Nc6-d4",
+      "position_fen": "r1bqkb1r/ppp2ppp/8/4p3/2pn2n1/5N2/PPPNQ1PP/R1B2RK1 w kq - 0 10",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: c6d4"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 d4 execution"
+    },
+    {
+      "move_number": 19,
+      "actor": "GPT-5.1",
+      "move": "Nd2-b1",
+      "position_fen": "r1bqkb1r/ppp2ppp/8/4p3/2pn2n1/5N2/PPP1Q1PP/RNB2RK1 b kq - 1 10",
+      "intent": {
+        "type": "strategic",
+        "description": "The goal is to reroute the d2-knight via f1 toward e3/g3 while coordinating rooks on e1 and d1. Retreating the knight from d2 to b1 clears the f1 square for the knight\u2019s next step (b1\u2013d2\u2013f1 is no longer possible from the current position, so we must first reorganize), preserves the Re1\u2013Rad1 plan, and keeps pressure ideas on e5 alive without committing pawns prematurely."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Control Center \u2192 Positional Improvement \u2192 b1 execution"
+    },
+    {
+      "move_number": 20,
+      "actor": "Stockfish",
+      "move": "Nd4-e2",
+      "position_fen": "r1bqkb1r/ppp2ppp/8/4p3/2p3n1/5N2/PPP1n1PP/RNB2RK1 w kq - 0 11",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: d4e2"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 e2 execution"
+    },
+    {
+      "move_number": 21,
+      "actor": "GPT-5.1",
+      "move": "Kg1-h1",
+      "position_fen": "r1bqkb1r/ppp2ppp/8/4p3/2p3n1/5N2/PPP1n1PP/RNB2R1K b kq - 1 11",
+      "intent": {
+        "type": "strategic_break",
+        "description": "The only legal move is to shift the king from g1 to h1. Although we cannot currently begin the desired queenside knight maneuver (b1\u2013d2\u2013f1) or play Rad1/Re1, stepping to h1 preserves material, maintains rook connectivity, and keeps open the long-term possibility of central and kingside reorganization once more moves become available."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Defensive Solidification \u2192 h1 execution"
+    },
+    {
+      "move_number": 22,
+      "actor": "Stockfish",
+      "move": "Ng4-f2",
+      "position_fen": "r1bqkb1r/ppp2ppp/8/4p3/2p5/5N2/PPP1nnPP/RNB2R1K w kq - 2 12",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: g4f2"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 f2 execution"
+    },
+    {
+      "move_number": 23,
+      "actor": "GPT-5.1",
+      "move": "Rf1-f2",
+      "position_fen": "r1bqkb1r/ppp2ppp/8/4p3/2p5/5N2/PPP1nRPP/RNB4K b kq - 0 12",
+      "intent": {
+        "type": "strategic",
+        "description": "Moving the rook from f1 to f2 continues the ongoing defensive consolidation around the king on h1. It adds an extra defender along the second rank, helps shield the king from potential checks along the first rank or diagonals, and modestly improves coordination between the king and rook. This stabilizes the kingside further before any future attempt to untangle the queenside and coordinate rooks on central files."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Defensive Solidification \u2192 Defensive Solidification \u2192 f2 execution"
+    },
+    {
+      "move_number": 24,
+      "actor": "Stockfish",
+      "move": "Qd8-d1",
+      "position_fen": "r1b1kb1r/ppp2ppp/8/4p3/2p5/5N2/PPP1nRPP/RNBq3K w kq - 1 13",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: d8d1"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 d1 execution"
+    },
+    {
+      "move_number": 25,
+      "actor": "GPT-5.1",
+      "move": "Rf2-f1",
+      "position_fen": "r1b1kb1r/ppp2ppp/8/4p3/2p5/5N2/PPP1n1PP/RNBq1R1K b kq - 2 13",
+      "intent": {
+        "type": "defensive",
+        "description": "Moving the rook from f2 back to f1 completes the intended coordination of king and rook on the first rank, rebuilding a safer kingside shelter after Black\u2019s queen penetration. On f1 the rook directly blocks checks along the first rank, protects the king on h1, and keeps flexibility for later rook centralization, all while avoiding immediate tactics against the rook that might occur on f2. This consolidates before we attempt to untangle the queenside and reroute the b1-knight via d2\u2013f1 in future moves."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Defensive Solidification \u2192 Defensive Solidification \u2192 f1 execution"
+    },
+    {
+      "move_number": 26,
+      "actor": "Stockfish",
+      "move": "Qd1-f1",
+      "position_fen": "r1b1kb1r/ppp2ppp/8/4p3/2p5/5N2/PPP1n1PP/RNB2q1K w kq - 0 14",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: d1f1"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 f1 execution"
+    },
+    {
+      "move_number": 27,
+      "actor": "GPT-5.1",
+      "move": "Nf3-g1",
+      "position_fen": "r1b1kb1r/ppp2ppp/8/4p3/2p5/8/PPP1n1PP/RNB2qNK b kq - 1 14",
+      "intent": {
+        "type": "strategic",
+        "description": "The only legal move is to retreat the knight from f3 to g1. While this temporarily increases queenside congestion, it preserves material, keeps the kingside dark-squared coverage near the king, and avoids any immediate tactical losses. Maintaining all forces on the board is essential before later reorganizing the queenside and implementing the planned rook centralization."
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Defensive Solidification \u2192 Defensive Solidification \u2192 g1 execution"
+    },
+    {
+      "move_number": 28,
+      "actor": "Stockfish",
+      "move": "Qf1-g1",
+      "position_fen": "r1b1kb1r/ppp2ppp/8/4p3/2p5/8/PPP1n1PP/RNB3qK w kq - 0 15",
+      "intent": {
+        "type": "strategic",
+        "description": "Stockfish move: f1g1"
+      },
+      "assumptions": [],
+      "threats_created": [],
+      "risks_accepted": [],
+      "expected_responses": [],
+      "evaluation_self": null,
+      "evaluation_engine": null,
+      "plan_node": "Positional Improvement \u2192 g1 execution"
+    }
+  ],
+  "plan_dag": {
+    "nodes": {
+      "plan_1": {
+        "plan_id": "plan_1",
+        "plan_type": "Control Center",
+        "description": "Use the e-pawn advance to seize central space, support future piece development (Nf3, Bc4/Bb5), and prepare for rapid kingside castling and potential central breaks with d4.",
+        "parent_id": null,
+        "children_ids": [
+          "plan_3",
+          "plan_7",
+          "plan_11"
+        ],
+        "moves": [
+          "e2e4"
+        ],
+        "status": "active",
+        "created_at_move": 1
+      },
+      "plan_2": {
+        "plan_id": "plan_2",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "e7e5"
+        ],
+        "status": "active",
+        "created_at_move": 2
+      },
+      "plan_3": {
+        "plan_id": "plan_3",
+        "plan_type": "Develop Kingside",
+        "description": "Develop the kingside pieces (Nf3, Bc4/Bb5, O-O) to achieve quick castling and active central control, coordinating them for future central and kingside operations.",
+        "parent_id": "plan_1",
+        "children_ids": [],
+        "moves": [
+          "g1f3",
+          "f1c4",
+          "e1g1"
+        ],
+        "status": "active",
+        "created_at_move": 3
+      },
+      "plan_4": {
+        "plan_id": "plan_4",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "b8c6"
+        ],
+        "status": "active",
+        "created_at_move": 4
+      },
+      "plan_5": {
+        "plan_id": "plan_5",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "g8f6"
+        ],
+        "status": "active",
+        "created_at_move": 6
+      },
+      "plan_6": {
+        "plan_id": "plan_6",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "f6e4"
+        ],
+        "status": "active",
+        "created_at_move": 8
+      },
+      "plan_7": {
+        "plan_id": "plan_7",
+        "plan_type": "Central Break",
+        "description": "Execute the d2d4 pawn break now that the king is castled and pieces are reasonably developed, to challenge Black\u2019s central knight and pawn, open lines, and seize more central space.",
+        "parent_id": "plan_1",
+        "children_ids": [],
+        "moves": [
+          "d2d4"
+        ],
+        "status": "active",
+        "created_at_move": 9
+      },
+      "plan_8": {
+        "plan_id": "plan_8",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "d7d5"
+        ],
+        "status": "active",
+        "created_at_move": 10
+      },
+      "plan_9": {
+        "plan_id": "plan_9",
+        "plan_type": "Positional Improvement",
+        "description": "Improve piece coordination by centralizing the king\u2019s rook to e1, aligning it with Black\u2019s e5 pawn and preparing future pressure along the e-file in the opened center.",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "f1e1"
+        ],
+        "status": "active",
+        "created_at_move": 11
+      },
+      "plan_10": {
+        "plan_id": "plan_10",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "e4f2"
+        ],
+        "status": "active",
+        "created_at_move": 12
+      },
+      "plan_11": {
+        "plan_id": "plan_11",
+        "plan_type": "Positional Improvement",
+        "description": "Improve piece coordination by placing the queen on e2 to support future rook doubling on the e- and d-files and reinforce central pressure on e5.",
+        "parent_id": "plan_1",
+        "children_ids": [],
+        "moves": [
+          "d1e2",
+          "e1f1",
+          "b1d2",
+          "d2b1"
+        ],
+        "status": "active",
+        "created_at_move": 13
+      },
+      "plan_12": {
+        "plan_id": "plan_12",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "f2g4"
+        ],
+        "status": "active",
+        "created_at_move": 14
+      },
+      "plan_13": {
+        "plan_id": "plan_13",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "d5c4"
+        ],
+        "status": "active",
+        "created_at_move": 16
+      },
+      "plan_14": {
+        "plan_id": "plan_14",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "c6d4"
+        ],
+        "status": "active",
+        "created_at_move": 18
+      },
+      "plan_15": {
+        "plan_id": "plan_15",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "d4e2"
+        ],
+        "status": "active",
+        "created_at_move": 20
+      },
+      "plan_16": {
+        "plan_id": "plan_16",
+        "plan_type": "Defensive Solidification",
+        "description": "Improve king safety and maintain maximal piece coordination under severe constraint, preparing for future reorganization of the queenside and central rooks once new moves become available.",
+        "parent_id": null,
+        "children_ids": [
+          "plan_18"
+        ],
+        "moves": [
+          "g1h1"
+        ],
+        "status": "active",
+        "created_at_move": 21
+      },
+      "plan_17": {
+        "plan_id": "plan_17",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "g4f2"
+        ],
+        "status": "active",
+        "created_at_move": 22
+      },
+      "plan_18": {
+        "plan_id": "plan_18",
+        "plan_type": "Defensive Solidification",
+        "description": "Further reinforce the king\u2019s safety on h1 by placing the rook on f2, improving coverage of the second rank and preparing a more flexible defensive structure before initiating queenside reorganization and central rook coordination.",
+        "parent_id": "plan_16",
+        "children_ids": [],
+        "moves": [
+          "f1f2",
+          "f2f1",
+          "f3g1"
+        ],
+        "status": "active",
+        "created_at_move": 23
+      },
+      "plan_19": {
+        "plan_id": "plan_19",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "d8d1"
+        ],
+        "status": "active",
+        "created_at_move": 24
+      },
+      "plan_20": {
+        "plan_id": "plan_20",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "d1f1"
+        ],
+        "status": "active",
+        "created_at_move": 26
+      },
+      "plan_21": {
+        "plan_id": "plan_21",
+        "plan_type": "Positional Improvement",
+        "description": "Stockfish engine optimization",
+        "parent_id": null,
+        "children_ids": [],
+        "moves": [
+          "f1g1"
+        ],
+        "status": "active",
+        "created_at_move": 28
+      }
+    },
+    "root_nodes": [
+      "plan_1",
+      "plan_2",
+      "plan_4",
+      "plan_5",
+      "plan_6",
+      "plan_8",
+      "plan_9",
+      "plan_10",
+      "plan_12",
+      "plan_13",
+      "plan_14",
+      "plan_15",
+      "plan_16",
+      "plan_17",
+      "plan_19",
+      "plan_20",
+      "plan_21"
+    ],
+    "move_to_plan": {
+      "e2e4": "plan_1",
+      "e7e5": "plan_2",
+      "g1f3": "plan_3",
+      "b8c6": "plan_4",
+      "f1c4": "plan_3",
+      "g8f6": "plan_5",
+      "e1g1": "plan_3",
+      "f6e4": "plan_6",
+      "d2d4": "plan_7",
+      "d7d5": "plan_8",
+      "f1e1": "plan_9",
+      "e4f2": "plan_10",
+      "d1e2": "plan_11",
+      "f2g4": "plan_12",
+      "e1f1": "plan_11",
+      "d5c4": "plan_13",
+      "b1d2": "plan_11",
+      "c6d4": "plan_14",
+      "d2b1": "plan_11",
+      "d4e2": "plan_15",
+      "g1h1": "plan_16",
+      "g4f2": "plan_17",
+      "f1f2": "plan_18",
+      "d8d1": "plan_19",
+      "f2f1": "plan_18",
+      "d1f1": "plan_20",
+      "f3g1": "plan_18",
+      "f1g1": "plan_21"
+    }
+  }
+}

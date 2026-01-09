@@ -3,18 +3,17 @@ from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
-from config import LLMConfig, SwarmConfig, LLMType
+from config import LLMConfig, LLMType
 
 import chess
 
 from pydantic import BaseModel, Field
 
 GoalPrompt = PromptTemplate(
-    input_variables=["board", "goal", "format_instructions", "turn", "legal_moves"],
+    input_variables=["board", "goal", "format_instructions", "turn", "legal_moves", "active_plans"],
     template="""
-    You are a chess agent.
-    You are given a goal to solve.
-    You need to solve the goal by making a move on the chess board.
+    You are a chess agent that thinks in terms of strategic plans.
+    You are given a goal to solve and need to make a move that fits into a strategic plan.
     
     Goal: {goal}
     
@@ -25,6 +24,26 @@ GoalPrompt = PromptTemplate(
     
     IMPORTANT: The board state has changed since the last move. Previous moves are no longer available.
     You MUST look at the CURRENT board state and legal moves list below.
+    
+    ================================================================================
+    ACTIVE STRATEGIC PLANS:
+    ================================================================================
+    {active_plans}
+    
+    You should either:
+    1. Continue executing an existing active plan
+    2. Create a new strategic plan if the position requires it
+    3. Create a sub-plan under an existing plan
+    
+    Common plan types include:
+    - Control Center (controlling central squares)
+    - Develop Kingside / Develop Queenside (piece development)
+    - Central Break (breaking in the center with pawns)
+    - Kingside Pressure / Queenside Pressure (attacking on a flank)
+    - Defensive Solidification (strengthening the position)
+    - Tactical Exploitation (taking advantage of tactics)
+    - Material Gain (winning material)
+    - Positional Improvement (improving piece placement)
     
     ================================================================================
     AVAILABLE LEGAL MOVES FOR {turn} (UCI NOTATION) - YOU MUST CHOOSE ONE OF THESE:
@@ -42,15 +61,18 @@ GoalPrompt = PromptTemplate(
     7. If the move is not in the list above, it is INVALID and will be rejected.
     8. The system will ONLY accept moves that appear in the list above.
     
-    VALIDATION: Before responding, verify your chosen move appears in the list above.
-    If it does not appear, choose a different move from the list.
+    STRATEGIC PLANNING:
+    - Identify which strategic plan your move belongs to
+    - If continuing an existing plan, use that plan_type and parent_plan
+    - If starting a new plan, specify the plan_type and leave parent_plan empty
+    - If creating a sub-plan, specify both plan_type and parent_plan
     
     Examples of UCI notation format:
     - "e2e4" means pawn moves from e2 to e4
     - "g1f3" means knight moves from g1 to f3
     - "e1g1" means king castles kingside (e1 to g1)
     
-    Provide the move and explain your reasoning.
+    Provide the move, explain your reasoning, and specify the strategic plan information.
     
     {format_instructions}
     """
@@ -60,6 +82,9 @@ class Output(BaseModel):
     move: str = Field(description="The move to make in UCI notation. MUST be exactly one of the legal moves provided in the prompt. Copy it exactly as it appears in the legal moves list (e.g., 'e2e4', 'g1f3').")
     reason: str = Field(description="The reason for the move")
     new_goal: str = Field(description="The new goal to solve")
+    plan_type: str = Field(description="The strategic plan type this move belongs to (e.g., 'Control Center', 'Develop Kingside', 'Central Break', 'Kingside Pressure', etc.)")
+    plan_description: str = Field(description="A brief description of the strategic plan or sub-plan this move executes")
+    parent_plan: str = Field(description="The parent plan this move belongs to, if any (e.g., 'Control Center' for a 'Develop Kingside' sub-plan). Leave empty if this is a top-level plan.")
 
 
 class Goal:
@@ -70,6 +95,7 @@ class Goal:
         self.move = None
         self.reason = None
         self.move_made = False  # Track if a valid move was made
+        self.plan_node = None  # Plan node path for this move
 
     def achieve(self, board: chess.Board, move_str: str, reason: str):
         """
@@ -141,29 +167,11 @@ class Goal:
                 board.push(self.move)
                 self.move_made = True
                 
-                # Verify the move was actually applied
-                moves_after = len(board.move_stack)
-                if moves_after > moves_before:
-                    # Move was successfully applied
-                    # CRITICAL: Verify turn alternated (White -> Black or Black -> White)
-                    if board.turn == expected_color:
-                        print(f"    ERROR: Turn did not alternate after move!")
-                        self.achieved = False
-                        self.move_made = False
-                        board.pop()  # Undo the move since turn didn't alternate
-                        return
-                    
-                    # Move was successfully applied and turn alternated
-                    if board.is_checkmate():
-                        self.achieved = True
-                    else:
-                        self.achieved = False
+                # Note: Turn naturally alternates in chess after a valid move
+                if board.is_checkmate():
+                    self.achieved = True
                 else:
-                    # Something went wrong - move wasn't applied
-                    # This shouldn't happen, but handle it just in case
-                    print(f"    ERROR: Move pushed but move_stack didn't increase!")
                     self.achieved = False
-                    self.move_made = False
             except Exception as e:
                 print(f"    ERROR pushing move to board: {e}")
                 self.achieved = False
@@ -194,20 +202,20 @@ class LLM:
     def __init__(self, config: LLMConfig):
         if config.llm_type == LLMType.OLLAMA:
             self.llm = ChatOllama(
-                model=config.llm_model.value,
+                model=config.llm_model,
                 temperature=config.temperature,
                 base_url=config.base_url,
                 api_key=config.api_key
             )
         elif config.llm_type == LLMType.OPENAI:
             self.llm = ChatOpenAI(
-                model=config.llm_model.value,
+                model=config.llm_model,
                 temperature=config.temperature,
                 api_key=config.api_key
             )
         elif config.llm_type == LLMType.ANTHROPIC:
             self.llm = ChatAnthropic(
-                model=config.llm_model.value,
+                model=config.llm_model,
                 temperature=config.temperature,
                 api_key=config.api_key
             )
@@ -215,7 +223,7 @@ class LLM:
     def invoke(self, prompt: str) -> str:
         return self.llm.invoke(prompt).content
 
-    def evolve(self, board: chess.Board = None, goal: Goal = None):
+    def evolve(self, board: chess.Board = None, goal: Goal = None, plan_dag = None, move_number: int = 0):
         """
         Evolve the agent based on the goal to solve.
         Ensures only valid moves are chosen and moves are made in the correct turn.
@@ -226,6 +234,17 @@ class LLM:
         # Determine whose turn it is - CRITICAL: only make moves for the current player
         turn = "White" if board.turn == chess.WHITE else "Black"
         expected_color = board.turn  # Store expected color to verify later
+        
+        # Get active plans information
+        active_plans_str = "No active plans"
+        if plan_dag:
+            active_plans = plan_dag.get_active_plans()
+            if active_plans:
+                plan_lines = []
+                for plan in active_plans:
+                    plan_path = plan.get_path(plan_dag)
+                    plan_lines.append(f"- {plan_path}: {plan.description} (moves: {', '.join(plan.moves[-3:]) if plan.moves else 'none'})")
+                active_plans_str = "\n".join(plan_lines)
         
         # Get list of legal moves in UCI notation
         # Show all moves if there are 40 or fewer, otherwise show first 40
@@ -248,6 +267,7 @@ class LLM:
                 "goal": goal.get_description(),
                 "turn": turn,
                 "legal_moves": legal_moves_str,
+                "active_plans": active_plans_str,
                 "format_instructions": parser.get_format_instructions()
             })
         except Exception as e:
@@ -363,6 +383,70 @@ class LLM:
             print(f"  FATAL ERROR: Move '{move_to_apply}' still not valid after all checks!")
             return False
         
+        # Process plan information and update PlanDAG
+        plan_node_path = None
+        if plan_dag and hasattr(result, 'plan_type') and result.plan_type:
+            try:
+                from plan_dag import PlanType
+                
+                # Try to find matching plan type
+                plan_type = None
+                for pt in PlanType:
+                    if pt.value.lower() == result.plan_type.lower():
+                        plan_type = pt
+                        break
+                
+                if not plan_type:
+                    # Create a custom plan type (will need to handle this)
+                    plan_type = PlanType.POSITIONAL_IMPROVEMENT  # Default fallback
+                
+                # Find parent plan if specified
+                parent_plan_id = None
+                if hasattr(result, 'parent_plan') and result.parent_plan:
+                    # Find parent plan by type
+                    active_plans = plan_dag.get_active_plans()
+                    for plan in active_plans:
+                        if plan.plan_type.value.lower() == result.parent_plan.lower():
+                            parent_plan_id = plan.plan_id
+                            break
+                
+                # Create or find the plan
+                plan_id = None
+                if parent_plan_id:
+                    # Check if sub-plan already exists
+                    parent_plan = plan_dag.get_node(parent_plan_id)
+                    if parent_plan:
+                        for child_id in parent_plan.children_ids:
+                            child = plan_dag.get_node(child_id)
+                            if child and child.plan_type == plan_type and child.status == "active":
+                                plan_id = child_id
+                                break
+                
+                if not plan_id:
+                    # Create new plan
+                    plan_id = plan_dag.create_plan(
+                        plan_type=plan_type,
+                        description=result.plan_description if hasattr(result, 'plan_description') else result.plan_type,
+                        parent_id=parent_plan_id,
+                        move_number=move_number
+                    )
+                
+                # Associate move with plan
+                plan_dag.add_move_to_plan(move_to_apply, plan_id)
+                
+                # Get the plan path for this move
+                plan_node_path = plan_dag.get_plan_path_for_move(move_to_apply)
+                print(f"  Plan: {plan_node_path}")
+                
+            except Exception as e:
+                print(f"  Warning: Error processing plan information: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Store plan_node in goal for recording
+        if plan_node_path:
+            goal.plan_node = plan_node_path
+        
         # Now apply the move
         print(f"  Applying move: {move_to_apply} (for {turn})")
         goal.achieve(board, move_to_apply, reason_to_use)
@@ -388,74 +472,4 @@ class LLM:
         return goal.is_achieved()
 
 
-class Swarm:
-    def __init__(self, config: SwarmConfig):
-        self.swarm = [LLM(config.llm_config) for _ in range(config.population_size)]
-        self.config = config
-    
-    def evolve(self, board: chess.Board = None, goal: Goal = None) -> bool:
-        """
-        Each agent makes a move in sequence. Moves must alternate between White and Black.
-        Only valid moves are accepted.
-        """
-        # Each agent makes a move in sequence, board updates after each move
-        for i, agent in enumerate(self.swarm):
-            # Check if goal is already achieved before this agent's turn
-            if goal.is_achieved():
-                return True
-            
-            # Store board state before this agent's move
-            moves_before = len(board.move_stack)
-            turn_before = board.turn  # Store as chess.WHITE or chess.BLACK
-            turn_before_str = "White" if turn_before == chess.WHITE else "Black"
-            
-            # Verify it's a valid turn (game not over)
-            if board.is_game_over():
-                print(f"\nGame is over. Result: {board.result()}")
-                return True
-            
-            # Let this agent make a move
-            if agent.evolve(board, goal):
-                # Goal achieved (checkmate)
-                print(f"\nAgent {i+1} achieved checkmate!")
-                return True
-            
-            # Check if a move was made
-            moves_after = len(board.move_stack)
-            turn_after = board.turn
-            turn_after_str = "White" if turn_after == chess.WHITE else "Black"
-            
-            if goal.move_made and moves_after > moves_before:
-                # Move was successfully made, board updated
-                # CRITICAL: Verify turn alternated (White -> Black or Black -> White)
-                if turn_after == turn_before:
-                    print(f"\nERROR: Turn did not alternate! Still {turn_before_str}'s turn")
-                    goal.move_made = False  # Mark as failed
-                else:
-                    # Move was successfully made, board updated, turn alternated
-                    print(f"\nAgent {i+1} made move: {goal.move.uci() if goal.move else 'unknown'}")
-                    print(f"  Board updated: {moves_before} -> {moves_after} moves")
-                    print(f"  Turn changed: {turn_before_str} -> {turn_after_str} ✓")
-                    # Continue to next agent (they'll see the updated board with opposite turn)
-                    continue
-            else:
-                # No move was made by this agent (invalid move or error)
-                print(f"\nAgent {i+1} failed to make a valid move")
-                if goal.move:
-                    attempted = goal.move.uci()
-                    print(f"  Attempted move: {attempted}")
-                    legal_moves_list = [m.uci() for m in list(board.legal_moves)]
-                    if attempted in legal_moves_list:
-                        print(f"  ERROR: Move is in legal moves but wasn't applied!")
-                    else:
-                        print(f"  Move not in legal moves list")
-                        print(f"  Legal moves (first 15): {legal_moves_list[:15]}")
-                elif goal.reason:
-                    print(f"  No move was generated (reason available: {goal.reason[:50]}...)")
-                # Try next agent (they might succeed)
-                continue
-        
-        # All agents have had their turn
-        # Return False if goal not achieved, True if achieved
-        return goal.is_achieved()
 
