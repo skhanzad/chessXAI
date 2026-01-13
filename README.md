@@ -1,43 +1,42 @@
-# SPARC: Self-Replicating Agents with Resource Caps
+# chessXAI: LLM-Powered Chess Agent with Strategic Planning
 
-A population of LLM agents that can spawn modified copies of themselves, compete for limited resources, and go extinct, producing evolutionary intelligence rather than task orchestration.
+A chess AI system that uses Large Language Models (LLMs) to play chess against Stockfish, with advanced strategic planning, move reasoning, and game analysis capabilities.
 
 ## Overview
 
-SPARC implements an evolutionary system where agents:
-- **Replicate**: Agents can spawn mutated copies of themselves
-- **Compete**: Agents compete for limited resources (API calls, compute time, memory)
-- **Evolve**: Mutations occur in prompts, parameters, and behavior strategies
-- **Survive**: Fitness is based on longevity - agents that survive longer thrive
-- **Go Extinct**: Resource exhaustion and poor performance lead to natural selection
+chessXAI combines:
+- **LLM Agents**: Uses OpenAI, Anthropic, or Ollama models to generate chess moves with strategic reasoning
+- **Strategic Planning**: Tracks game plans as a Directed Acyclic Graph (DAG) with hierarchical plan structures
+- **Game Recording**: Comprehensive move logging with intent, assumptions, threats, and evaluations
+- **Visualization**: Real-time Pygame-based board rendering with move details
+- **Analysis Tools**: Plan DAG visualization and game replay capabilities
 
-## Architecture
+## Features
 
-The system consists of several key components:
+### Core Capabilities
 
-- **Agent Core**: Individual agents with replication, mutation, and resource tracking
-- **Resource Manager**: Global resource pools with caps and first-come-first-served allocation
-- **Evolution Engine**: Main simulation loop managing population dynamics
-- **Mutation System**: Strategies for modifying agent copies (prompts, parameters, behavior)
-- **Survival System**: Resource competition and extinction mechanisms
-- **LLM Integration**: Local model interface (Ollama-compatible)
+- **LLM-Powered Move Generation**: Agents use LLMs to generate moves with strategic reasoning
+- **Plan-Based Strategy**: Tracks strategic plans (Control Center, Development, Defensive, etc.) as a DAG
+- **Move Validation**: Ensures only legal moves are selected from provided move lists
+- **Detailed Game Recording**: Records moves with intent, assumptions, threats, risks, and evaluations
+- **Real-Time Visualization**: Pygame-based board rendering with piece display and move information
+- **Game Replay**: Replay saved games with full move history and reasoning
 
-### System Flow
+### Strategic Planning
 
-```
-Initialize Population → Evolution Loop → Resource Allocation → Agent Actions
-                                                                    ↓
-                                    ← Replication & Mutation ← Survival Challenges
-                                                                    ↓
-                                                              Extinction Check
-```
+The system tracks strategic plans as a Directed Acyclic Graph:
+- **Plan Types**: Control Center, Development, Defensive, Tactical, etc.
+- **Hierarchical Structure**: Plans can have parent-child relationships
+- **Plan Lifecycle**: Plans transition through states (active, completed, abandoned, failed, forced)
+- **Move Association**: Each move is linked to a strategic plan
 
 ## Installation
 
 ### Prerequisites
 
 - Python 3.8 or higher
-- Ollama installed and running (or compatible local LLM service)
+- Stockfish chess engine (download from https://stockfishchess.org/download/)
+- LLM API access (OpenAI, Anthropic, or local Ollama)
 
 ### Setup
 
@@ -45,215 +44,272 @@ Initialize Population → Evolution Loop → Resource Allocation → Agent Actio
 
 2. Install dependencies:
 ```bash
-pip install -r requirements.txt
+pip install langchain-ollama langchain-openai langchain-anthropic python-chess pygame python-dotenv pydantic
 ```
 
-3. Ensure Ollama is running:
-```bash
-# Install Ollama from https://ollama.ai
-ollama serve
-# Pull a model (e.g., llama2)
-ollama pull llama2
+3. Install Stockfish:
+   - **Windows**: Download from https://stockfishchess.org/download/ and extract to `engine/stockfish/`
+   - **Linux**: `sudo apt-get install stockfish` or download binary
+   - **Mac**: `brew install stockfish` or download binary
+
+4. Configure API keys (create `.env` file):
+```env
+OPENAI_API_KEY=your_openai_key_here
+# OR
+ANTHROPIC_API_KEY=your_anthropic_key_here
+```
+
+5. Update `main.py` to set the Stockfish path:
+```python
+ENGINE_PATH = os.path.join(os.path.dirname(__file__), "engine", "stockfish", "stockfish.exe")
+# Adjust path for your system
 ```
 
 ## Configuration
 
-Edit `config/default.yaml` to customize the simulation:
+Edit `config.py` and `main.py` to customize:
 
-```yaml
-population:
-  initial_size: 10      # Starting number of agents
-  max_size: 100         # Maximum population size
+### LLM Configuration (`config.py`)
+```python
+# Choose LLM provider
+llm_type = LLMType.OPENAI  # OPENAI, ANTHROPIC, or OLLAMA
+llm_model = "gpt-4"  # Model name
+temperature = 0.2  # Lower = more deterministic
+```
 
-resources:
-  api_calls_per_minute: 100    # API call limit per minute
-  compute_time_per_minute: 60  # CPU seconds per minute
-  memory_mb: 1024              # Memory limit in MB
+### Game Configuration (`main.py`)
+```python
+# Choose who plays first
+AGENT_PLAYS_FIRST = True  # True = Agent plays White, False = Stockfish plays White
 
-mutation:
-  replication_rate: 0.1         # Base probability of replication per cycle
-  prompt_mutation_rate: 0.3     # Rate of prompt mutations
-  parameter_mutation_rate: 0.2   # Rate of parameter mutations
-  behavior_mutation_rate: 0.1    # Rate of behavior mutations
-
-llm:
-  base_url: "http://localhost:11434"  # Ollama API URL
-  default_model: "llama2"             # Default model name
-
-evolution:
-  cycles_per_generation: 100          # Cycles per generation
-  extinction_threshold: 0.1            # Resource threshold for extinction (10%)
+# Stockfish thinking time
+stockfish.play(board, chess.engine.Limit(time=1.0))  # Adjust time limit
 ```
 
 ## Usage
 
-### Basic Usage
+### Basic Game Play
 
-Run the simulation with default configuration:
+Run a game between the LLM agent and Stockfish:
 
 ```bash
 python main.py
 ```
 
-### Command Line Options
+The game will:
+1. Initialize the board and players
+2. Alternate moves between agent and Stockfish
+3. Display the board in real-time with Pygame
+4. Record all moves with detailed information
+5. Save the game to a JSON file when complete
+
+### Game Recording
+
+Games are automatically saved to `game_replay_YYYYMMDD_HHMMSS.json` with:
+- Complete move history
+- Intent descriptions for each move
+- Strategic plan associations
+- Plan DAG structure
+- Assumptions, threats, risks, and evaluations
+
+### Replay a Game
+
+Replay a saved game:
 
 ```bash
-python main.py --help
+python replay_game.py game_replay_20260109_142600.json
 ```
 
-Options:
-- `-c, --config PATH`: Path to configuration file (default: `config/default.yaml`)
-- `-g, --generations N`: Maximum number of generations to run
-- `-l, --log-level LEVEL`: Logging level (DEBUG, INFO, WARNING, ERROR)
-- `--log-dir DIR`: Directory for log files (default: `logs`)
+### Visualize Plan DAG
 
-### Examples
+Visualize the strategic plan structure:
 
-Run for 5 generations:
 ```bash
-python main.py -g 5
+python eval.py game_replay_20260109_142600.json
 ```
 
-Run with custom config and debug logging:
-```bash
-python main.py -c config/custom.yaml -l DEBUG
-```
+This generates a visual graph of the plan DAG showing:
+- Plan hierarchy and relationships
+- Move associations
+- Plan status (active, completed, failed, etc.)
+- Textual analysis of the game strategy
 
-## How It Works
+## Architecture
 
-### Agent Lifecycle
+### Core Components
 
-1. **Initialization**: Random agents are created with varied prompts, parameters, and behaviors
-2. **Action Phase**: Each cycle, agents attempt to:
-   - Request resources (API calls, compute, memory)
-   - Face survival challenges
-   - Resource allocation challenges
-   - Competition scenarios
-   - Efficiency tests
-3. **Replication**: Agents may spawn mutated offspring if:
-   - Resources are available
-   - Population is below maximum
-   - Replication probability is met
-4. **Mutation**: Offspring inherit parent traits with mutations:
-   - **Prompt mutations**: Text variations, additions, deletions
-   - **Parameter mutations**: Temperature, top_p adjustments
-   - **Behavior mutations**: Strategy changes (conservative/aggressive/balanced)
-5. **Extinction**: Agents go extinct when:
-   - Resources are critically low
-   - Agent efficiency is very poor
-   - Maximum age is reached
-6. **Selection**: Agents with higher longevity and resource efficiency survive longer
+- **`models.py`**: LLM agent implementation with move generation and validation
+- **`game_recorder.py`**: Game recording with detailed move metadata
+- **`plan_dag.py`**: Strategic plan DAG data structures and management
+- **`render.py`**: Pygame-based board visualization
+- **`main.py`**: Main game loop orchestrating agent vs Stockfish
+- **`replay_game.py`**: Game replay functionality
+- **`eval.py`**: Plan DAG visualization and analysis
 
-### Resource Competition
-
-Resources are allocated on a **first-come-first-served** basis, creating natural competition:
-- Agents that request resources early get them
-- Agents that use resources efficiently survive longer
-- Resource exhaustion creates selection pressure
-
-### Fitness Evaluation
-
-Fitness is primarily based on **longevity** (age in cycles):
-- Agents that survive more cycles have higher fitness
-- Resource efficiency is a secondary factor
-- Replication success contributes to fitness
-
-## Output
-
-The system generates:
-
-1. **Console Output**: Real-time progress and statistics
-2. **Log Files**: Detailed logs in `logs/sparc_YYYYMMDD_HHMMSS.log`
-3. **Statistics Files**: JSON statistics in `logs/statistics_YYYYMMDD_HHMMSS.json`
-
-### Statistics Include
-
-- Population size over time
-- Replication and extinction counts
-- Average age and longevity
-- Resource usage patterns
-- Generation-by-generation breakdown
-
-## Example Output
+### System Flow
 
 ```
-SPARC: Self-Replicating Agents with Resource Caps
-Logging to: logs/sparc_20250107_212000.log
+Initialize Board & Players
+    ↓
+Game Loop:
+  Agent Turn → LLM generates move → Validate → Apply → Record
+    ↓
+  Stockfish Turn → Engine calculates → Apply → Record
+    ↓
+  Render Board → Check Game Status
+    ↓
+Save Game → Generate Plan DAG → Visualize
+```
 
-Configuration loaded from: config/default.yaml
-Starting evolution simulation...
+## Move Generation
 
-INFO - Starting evolution simulation
-INFO - Initializing population of 10 agents
-INFO - Starting generation 1
-INFO - Cycle 1 complete: population=10, active=10, replications=1, extinct=0
-...
-INFO - Generation 1 complete: population 10 -> 12, replications=3, extinctions=0
+The LLM agent:
+1. Receives current board state (FEN notation)
+2. Gets list of legal moves (UCI notation)
+3. Considers active strategic plans
+4. Generates move with reasoning and plan association
+5. Move is validated against legal moves list
+6. Only valid moves are accepted (with fallback if needed)
 
-============================================================
-EVOLUTION STATISTICS SUMMARY
-============================================================
-Total Generations: 5
-Initial Population: 10
-Final Population: 15
-Population Change: +5
-Total Replications: 12
-Total Extinctions: 2
-Avg Replications/Generation: 2.40
-Avg Extinctions/Generation: 0.40
+### Strategic Planning
 
-Final Survival Statistics:
-  Active Agents: 13
-  Average Age: 8.5
-  Average Longevity: 8.5
-  Average Efficiency: 2.3
-  Total Offspring: 12
-  Max Generation: 3
-============================================================
+The agent thinks in terms of strategic plans:
+- **Control Center**: Central pawn advances (e4, d4)
+- **Development**: Piece development (Nf3, Bc4, castling)
+- **Defensive**: Responding to threats, protecting pieces
+- **Tactical**: Exploiting tactical opportunities
+- **Material Gain**: Capturing pieces, winning material
+
+Plans are tracked as a DAG where:
+- Root plans represent major strategic themes
+- Sub-plans represent specific execution steps
+- Moves are associated with plans
+- Plans transition based on game events
+
+## Game Record Format
+
+Each move is recorded with:
+
+```json
+{
+  "move_number": 1,
+  "actor": "GPT-5.1",
+  "move": "e2-e4",
+  "move_uci": "e2e4",
+  "position_fen": "...",
+  "intent": {
+    "type": "Control Center",
+    "description": "Establish central control with e4"
+  },
+  "assumptions": [...],
+  "threats_created": [...],
+  "risks_accepted": [...],
+  "expected_responses": [...],
+  "evaluation_self": "...",
+  "evaluation_engine": null,
+  "plan_node": "Control Center → e4 execution"
+}
+```
+
+## Plan DAG Structure
+
+The Plan DAG tracks strategic thinking:
+
+```json
+{
+  "nodes": {
+    "plan_1": {
+      "plan_type": "Control Center",
+      "description": "Establish central pawn presence",
+      "moves": ["e2e4", "d2d4"],
+      "status": "active",
+      "created_at_move": 1
+    }
+  },
+  "root_nodes": ["plan_1"],
+  "move_to_plan": {
+    "e2e4": "plan_1",
+    "d2d4": "plan_1"
+  }
+}
 ```
 
 ## Customization
 
-### Adding Custom Mutations
+### Adding New Plan Types
 
-Edit `src/mutations.py` to add new mutation strategies.
+Edit `plan_dag.py`:
 
-### Custom Survival Challenges
+```python
+class PlanType(Enum):
+    # ... existing types ...
+    YOUR_NEW_PLAN = "Your New Plan"
+```
 
-Modify `src/survival.py` to add new challenge types.
+### Custom LLM Prompts
 
-### Different LLM Providers
+Modify `GoalPrompt` in `models.py` to change how the agent thinks about moves.
 
-Update `src/llm_client.py` to support other LLM APIs (OpenAI, Anthropic, etc.).
+### Visualization Customization
+
+Edit `render.py` to customize board appearance, colors, or information display.
 
 ## Troubleshooting
 
-### Ollama Not Available
+### Stockfish Not Found
 
-If Ollama is not running, the system will continue with limited functionality. Agents will still compete for resources and evolve, but LLM-based decision making will be disabled.
+Ensure Stockfish is installed and the path in `main.py` is correct:
+```python
+ENGINE_PATH = "path/to/stockfish/executable"
+```
 
-### Resource Exhaustion
+### LLM API Errors
 
-If resources are exhausted too quickly:
-- Increase resource caps in configuration
-- Reduce population size
-- Adjust mutation/replication rates
+- Check API keys in `.env` file
+- Verify API quota/limits
+- Check network connectivity
 
-### Performance Issues
+### Pygame Display Issues
 
-For large populations:
-- Reduce `cycles_per_generation`
-- Increase resource caps
-- Use faster/smaller LLM models
+- Ensure display is available (for headless servers, use Xvfb or similar)
+- Check font availability for chess piece symbols
+
+### Move Validation Errors
+
+The system automatically validates moves and uses fallbacks if the LLM generates invalid moves. Check console output for validation messages.
+
+## Example Output
+
+```
+=== Stockfish vs Agent Game ===
+Agent plays as White, Stockfish plays as Black
+Starting game...
+
+--- Move 1: White's turn ---
+Agent is thinking (White)...
+  VALIDATED: Move 'e2e4' is in allowed moves list ✓
+  Plan: Control Center → e4 execution
+Agent (White) played: e2e4
+Reason: Establish central control with e4
+
+--- Move 2: Black's turn ---
+Stockfish is thinking (Black)...
+Stockfish (Black) played: e7e5
+
+...
+
+Game saved to: game_replay_20260109_142600.json
+Plan DAG structure saved with 5 plan nodes
+```
 
 ## License
 
 This project is provided as-is for research and experimentation purposes.
 
-## Contributing
-
-This is an experimental system. Feel free to modify and extend it for your own research!
-
 ## Acknowledgments
 
-SPARC is inspired by evolutionary algorithms and artificial life systems, applying these concepts to LLM agents in a resource-constrained environment.
+chessXAI demonstrates how LLMs can be applied to strategic games, combining:
+- Natural language reasoning for move selection
+- Structured planning for long-term strategy
+- Integration with traditional chess engines
+- Comprehensive game analysis and visualization
